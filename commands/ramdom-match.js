@@ -18,10 +18,14 @@ module.exports = {
         const input = interaction.options.getInteger("number-of-users")
 
         // the number of members in the server
-        const memberCount = interaction.guild.memberCount
-        console.log('memberCount', memberCount)
         
-        // TODO: need to get number of users excluding bot in the server
+        const totalMemberCount = interaction.guild.memberCount
+        
+        const humanMemberCount = interaction.guild.members.cache.filter(member => !member.user.bot).size
+        
+        console.log(`total : ${totalMemberCount}, human : ${humanMemberCount}`)
+        
+        
         // TODO: need to generate each pairs of random coffee chat group with 2-3 people
         // TODO: need to only send the message to the matched users
         
