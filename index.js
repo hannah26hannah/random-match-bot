@@ -3,13 +3,18 @@ const path = require('node:path')
 
 // Require the necessary discord.js classes
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
-const { token } = require('./config.json');
+const { token, guildId } = require('./config.json');
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds ] });
+const client = new Client({ 
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers ] });
 
 client.commands = new Collection();
 
+
+/**
+ * fs 모듈을 사용하여 commands 폴더에 있는 모든 파일을 읽어온다.
+ */
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
@@ -47,10 +52,19 @@ client.on(Events.InteractionCreate, async interaction => {
 		}
 	}
 })
+
 // When the client is ready, run this code (only once)
 // We use 'c' for the event parameter to keep it separate from the already defined 'client'
-client.once(Events.ClientReady, c => {
-	console.log(`Ready! Logged in as ${c.user.tag}`);
+client.once(Events.ClientReady, async (client) => {
+	console.log(`Ready! Logged in as ${client.user.tag}`);
+	
+	try { 
+		const guild = client.guilds.cache.get(guildId);
+		await guild.members.fetch();
+		
+	} catch(error) {
+		console.log('error while fetching the users', error)
+	}
 });
 
 // Log in to Discord with your client's token
