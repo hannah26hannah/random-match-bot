@@ -2,7 +2,7 @@
  * @overview Match given number of random users for coffee chat
  */
 const { SlashCommandBuilder} = require('discord.js');
-// const { guildId } = require('../config.json')
+
 
 module.exports = {
     data: new SlashCommandBuilder()
