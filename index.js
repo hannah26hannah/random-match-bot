@@ -1,9 +1,13 @@
 const fs = require('node:fs')
 const path = require('node:path')
 
+require('dotenv').config();
+
+const { TOKEN, GUILD_ID } = process.env;
+
 // Require the necessary discord.js classes
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
-const { token, guildId } = require('./config.json');
+
 
 // Create a new client instance
 const client = new Client({ 
@@ -59,7 +63,7 @@ client.once(Events.ClientReady, async (client) => {
 	console.log(`Ready! Logged in as ${client.user.tag}`);
 	
 	try { 
-		const guild = client.guilds.cache.get(guildId);
+		const guild = client.guilds.cache.get(GUILD_ID);
 		await guild.members.fetch();
 		
 	} catch(error) {
@@ -68,4 +72,4 @@ client.once(Events.ClientReady, async (client) => {
 });
 
 // Log in to Discord with your client's token
-client.login(token);
+client.login(TOKEN);
